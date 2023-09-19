@@ -9,11 +9,18 @@ from django.core import serializers
 def show_main(request):
     products = Product.objects.all()
 
+    # if products:
+    #     last_products = products.last()
+    # else: 
+    #     last_products = None
+
+
     context = {
         'AppName': 'PakBepeStore' ,
         'name': 'Sheryl', # Nama kamu
         'class': 'PBP D', # Kelas PBP kamu
-        'products': products
+        'products': products,
+      #  'last_products': last_products,
     }
 
     return render(request, "main.html", context)
