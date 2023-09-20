@@ -27,18 +27,10 @@ def show_main(request):
 
 
     context = {
-<<<<<<< HEAD
         'name': request.user.username,
         'class': 'PBP D', # Kelas PBP kamu
         'products': products,
         'last_login': request.COOKIES['last_login'],
-=======
-        'AppName': 'PakBepeStore' ,
-        'name': 'Sheryl', # Nama kamu
-        'class': 'PBP D', # Kelas PBP kamu
-        'products': products,
-      #  'last_products': last_products,
->>>>>>> c9aaeacea8717919cee1652a05d7b857f1a757d4
     }
 
     return render(request, "main.html", context)
