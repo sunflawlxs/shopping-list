@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<<<<<<< HEAD
     <h1>Shopping List Page</h1>
+=======
+<h1>PakBepeStore List Page</h1>
+>>>>>>> c9aaeacea8717919cee1652a05d7b857f1a757d4
 
     <h5>Name:</h5>
     <p>{{name}}</p>
@@ -10,11 +14,14 @@
     <p>{{class}}</p>
 
 <table>
+    <br>
+    <h4>Kamu menyimpan {{ products.count }} item(s) pada toko!!</h4>
     <tr>
         <th>Name</th>
         <th>Price</th>
         <th>Description</th>
         <th>Date Added</th>
+    
     </tr>
 
     {% comment %} Berikut cara memperlihatkan data produk di bawah baris ini {% endcomment %}
