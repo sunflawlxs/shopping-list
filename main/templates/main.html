@@ -1,73 +1,75 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<<<<<<< HEAD
-    <h1>Shopping List Page</h1>
-=======
-<h1>PakBepeStore List Page</h1>
->>>>>>> c9aaeacea8717919cee1652a05d7b857f1a757d4
+    <style>
+        table, th, td {
+            border: 1px solid black;
+        }
+    </style>
 
-    <h5>Name:</h5>
-    <p>{{name}}</p>
-
-    <h5>Class:</h5>
-    <p>{{class}}</p>
-
-<table>
-    <br>
-    <h4>Kamu menyimpan {{ products.count }} item(s) pada toko!!</h4>
-    <tr>
-        <th>Name</th>
-        <th>Price</th>
-        <th>Description</th>
-        <th>Date Added</th>
-    
-    </tr>
-
-    {% comment %} Berikut cara memperlihatkan data produk di bawah baris ini {% endcomment %}
-
-    {% for product in products %}
-        <tr>
-            <td>{{product.name}}</td>
-            <td>{{product.price}}</td>
-            <td>{{product.description}}</td>
-            <td>{{product.date_added}}</td>
-            <a href="{% url 'main:edit_product' product.pk %}">
-                <button>
-                    Edit
-                </button>
-            </a>
-            <td>
-                <a href="{% url 'main:edit_product' product.pk %}">
-                    <button>
-                        Edit
-                    </button>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #505355;">
+        <div class="container-fluid">
+        <a class="navbar-brand" href="#">Shopping List</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Main</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'main:create_product' %}">Add Product</a>
+            </li>
+            </ul>
+            <a class="btn btn-danger mx-2" href="{% url 'main:logout' %}">Logout</a>
+            <div class="dropdown">
+                <a class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    My Profile
+                    <img src="https://pbs.twimg.com/profile_images/1636816782940880912/NrlYGwFb_400x400.jpg" width="40" height="40" class="rounded-circle">
                 </a>
-                <a href="{% url 'main:delete_product' product.pk %}">
-                      <button>
-                          Delete
-                      </button>
-                  </a>
-            </td>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="#">Name: {{ name }}</a></li>
+                  <li><a class="dropdown-item" href="#">Class: {{ class }}</a></li>
+                </ul>
+              </div>
+        </div>
+        </div>
+    </nav>
+
+    <table class="mx-1 my-2 table table-striped">
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>Date Added</th>
         </tr>
 
-    {% endfor %}
-</table>
+        {% comment %} Berikut cara memperlihatkan data produk di bawah baris ini {% endcomment %}
 
-<br />
+        {% for product in products %}
+            <tr>
+                <td>{{product.name}}</td>
+                <td>{{product.price}}</td>
+                <td>{{product.description}}</td>
+                <td>{{product.date_added}}</td>
+                <td>
+                    <a href="{% url 'main:edit_product' product.pk %}">
+                        <button type="button" class="btn btn-primary">
+                            Edit
+                        </button>
+                    </a>
+                    <a href="{% url 'main:delete_product' product.pk %}">
+                        <button type="button" class="btn btn-danger">
+                            Delete
+                        </button>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
 
-<h5>Sesi terakhir login: {{ last_login }}</h5>
-
-<a href="{% url 'main:create_product' %}">
-    <button>
-        Add New Product
-    </button>
-</a>
-
-<a href="{% url 'main:logout' %}">
-    <button>
-        Logout
-    </button>
-</a>
-
+    <h5 class="mx-2 my-2">Sesi terakhir login: {{ last_login }}</h5>
+    
+    <br />
 {% endblock content %}
