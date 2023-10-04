@@ -1,21 +1,22 @@
-from django.shortcuts import render
+import datetime
 from django.http import HttpResponseNotFound, HttpResponseRedirect
-from main.forms import ProductForm
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
+from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
 from django.core import serializers
+from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from main.forms import ProductForm
+from django.urls import reverse
 from main.models import Product
 from django.shortcuts import redirect
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib import messages
-from django.contrib.auth import authenticate, login
-from django.contrib.auth import logout
-from django.contrib.auth.decorators import login_required
-import datetime
-from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.contrib import messages  
 from django.views.decorators.csrf import csrf_exempt
 
+# Create your views here.
 @login_required(login_url='/login')
 
 def show_main(request):
@@ -23,9 +24,9 @@ def show_main(request):
 
     context = {
         'name': request.user.username,
-        'class': 'PBP D',
+        'class': 'PBP E', 
         'products': products,
-        'last_login': request.COOKIES['last_login']
+        'last_login': request.COOKIES['last_login'],
     }
 
     return render(request, "main.html", context)
@@ -42,6 +43,28 @@ def create_product(request):
     context = {'form': form}
     return render(request, "create_product.html", context)
 
+def edit_product(request, id):
+    # Get product berdasarkan ID
+    product = Product.objects.get(pk = id)
+
+    # Set product sebagai instance dari form
+    form = ProductForm(request.POST or None, instance=product)
+
+    if form.is_valid() and request.method == "POST":
+        # Simpan form dan kembali ke halaman awal
+        form.save()
+        return HttpResponseRedirect(reverse('main:show_main'))
+
+    context = {'form': form}
+    return render(request, "edit_product.html", context)
+
+def delete_product(request, id):
+    # Get data berdasarkan ID
+    product = Product.objects.get(pk = id)
+    # Hapus data
+    product.delete()
+    # Kembali ke halaman awal
+    return HttpResponseRedirect(reverse('main:show_main'))
 
 def show_xml(request):
     data = Product.objects.all()
@@ -92,31 +115,8 @@ def logout_user(request):
     response.delete_cookie('last_login')
     return response
 
-def edit_product(request, id):
-    # Get product berdasarkan ID
-    product = Product.objects.get(pk = id)
-
-    # Set product sebagai instance dari form
-    form = ProductForm(request.POST or None, instance=product)
-
-    if form.is_valid() and request.method == "POST":
-        # Simpan form dan kembali ke halaman awal
-        form.save()
-        return HttpResponseRedirect(reverse('main:show_main'))
-
-    context = {'form': form}
-    return render(request, "edit_product.html", context)
-
-def delete_product(request, id):
-    # Get data berdasarkan ID
-    product = Product.objects.get(pk = id)
-    # Hapus data
-    product.delete()
-    # Kembali ke halaman awal
-    return HttpResponseRedirect(reverse('main:show_main'))
-
 def get_product_json(request):
-    product_item = Product.objects.all()
+    product_item = Product.objects.filter(user= request.user)
     return HttpResponse(serializers.serialize('json', product_item))
 
 @csrf_exempt
@@ -131,4 +131,5 @@ def add_product_ajax(request):
         new_product.save()
 
         return HttpResponse(b"CREATED", status=201)
+
     return HttpResponseNotFound()
